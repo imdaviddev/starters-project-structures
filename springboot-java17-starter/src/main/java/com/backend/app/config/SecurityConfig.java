@@ -1,5 +1,8 @@
 package com.backend.app.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +16,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -35,20 +39,28 @@ public class SecurityConfig {
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(null);
-        provider.setUserDetailsService(null);
+        provider.setPasswordEncoder(userDetailsService());
+        provider.setUserDetailsService(passwordEncoder());
         return provider;
     }
 
     @Bean
     public UserDetailsService userDetailsService(){
-        UserDetails userDetails = User.withUsername("davi")
+        List<UserDetails> userDetailsList = new ArrayList<>();
+        
+        userDetailsList.add(User.withUsername("davi")
             .password("1234")
             .roles("ADMIN")
             .authorities("READ", "CREATE")
-            .build();
-        
-        return new InMemoryUserDetailsManager(userDetails);
+            .build());
+
+        userDetailsList.add(User.withUsername("user")
+            .password("1234")
+            .roles("USER")
+            .authorities("READ")
+            .build());
+
+        return new InMemoryUserDetailsManager(userDetailsList);
     }
 
     @Bean // Esto es solo a modo de prueba no se debe usar en producccion
