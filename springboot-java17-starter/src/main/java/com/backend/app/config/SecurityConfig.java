@@ -32,6 +32,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securtyFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
+                .headers().frameOptions().disable()
+                .and()
                 .csrf(csrf -> csrf.disable())
                 // Cuando solo nos loguamos con usuario y contraseña (sin token)
                 .httpBasic(Customizer.withDefaults())
@@ -41,13 +43,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(http -> {
                     // Configurar los endpoints publicos
                     http.requestMatchers(HttpMethod.GET, "/api/users").permitAll();
+                    http.requestMatchers("/h2-console/**").permitAll();
 
                     // Configuarar los endpoints privados
                     http.requestMatchers(HttpMethod.POST, "/api/users").hasAuthority("READ");
 
                     // Configurar el resto de endpoints - NO ESPECIFICADOS
-                    http.anyRequest().denyAll(); 
-                    //http.anyRequest().authenticated(); --> Si no especifico pero si tengo los permisos me permite acceder
+                    //http.anyRequest().denyAll(); 
+                    http.anyRequest().authenticated(); // --> Si no especifico pero si tengo los permisos me permite acceder
                 })
                 .build();
     }

@@ -47,7 +47,7 @@ public class UserController {
         Optional<User> userOPtional = userRepository.findById(id);
         if(userOPtional.isPresent()){
             User user = userOPtional.get();
-            user.setName(userDetails.getName());
+            user.setUsername(userDetails.getUsername());
             user.setEmail(userDetails.getEmail());
             userRepository.save(user);
             return ResponseEntity.ok().body(user);
