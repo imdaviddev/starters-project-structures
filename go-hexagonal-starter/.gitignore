@@ -1,0 +1,25 @@
+# Go build artifacts
+/bin
+/pkg
+/.bin
+/.pkg
+
+# IDEs y editores
+.vscode/
+/.idea/
+
+# Archivos temporales
+*.log
+*.tmp
+
+# Archivos de configuración del sistema operativo (pueden ser generados en tu entorno local)
+.DS_Store  # macOS
+Thumbs.db  # Windows
+
+# Archivos de configuración de GoLand
+/.idea/
+
+# Archivos de dependencias compiladas
+*.exe
+*.out
+*.test
